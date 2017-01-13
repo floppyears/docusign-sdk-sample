@@ -14,6 +14,7 @@ class DemoApplication {
     @RequestMapping("/")
     @ResponseBody
     String home() {
+        DocusignExample.run()
         return "Hello World!";
     }
 
