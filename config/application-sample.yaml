@@ -1,0 +1,9 @@
+demo:
+  username: secret
+  password: sauce
+  integratorKey: secret-sauce
+  basePath: https://demo.docusign.net/restapi
+  templateId: template id
+  roleName: Signing Role
+  email: example@example.com
+  name: Benny Beaver

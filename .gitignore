@@ -1,3 +1,4 @@
+gradle
 .gradle
 *.sw?
 .#*
@@ -37,4 +38,4 @@ overridedb.*
 dump.rdb
 transaction-logs
 
-application.properties
+application.yaml
