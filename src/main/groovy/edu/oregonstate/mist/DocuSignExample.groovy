@@ -7,18 +7,17 @@ import com.docusign.esign.model.*
 import java.util.List
 
 public class DocuSignExample {
-    public static void run() {
-        String username = "[EMAIL]"
-        String password = "[PASSWORD]"
-        String integratorKey = "[INTEGRATOR_KEY]"
+    public static void run(def properties) {
 
         // initialize client for desired environment and add X-DocuSign-Authentication header
         ApiClient apiClient = new ApiClient()
-        apiClient.setBasePath("https://demo.docusign.net/restapi")
+        apiClient.setBasePath(properties.basePath)
 
         // configure 'X-DocuSign-Authentication' authentication header
-        String authHeader = "{\"Username\":\"" +  username + "\",\"Password\":\"" +  password + "\",\"IntegratorKey\":\"" +  integratorKey + "\"}"
+        String authHeader = "{\"Username\":\"" +  properties.username + "\",\"Password\":\"" +
+                properties.password + "\",\"IntegratorKey\":\"" +  properties.integratorKey + "\"}"
         apiClient.addDefaultHeader("X-DocuSign-Authentication", authHeader)
+
         Configuration.setDefaultApiClient(apiClient)
         try
         {
@@ -28,7 +27,12 @@ public class DocuSignExample {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             AuthenticationApi authApi = new AuthenticationApi()
-            LoginInformation loginInfo = authApi.login()
+
+            AuthenticationApi.LoginOptions loginOptions = new AuthenticationApi.LoginOptions()
+            loginOptions.setApiPassword("true")
+            loginOptions.setIncludeAccountIdGuid("true")
+
+            LoginInformation loginInfo = authApi.login(loginOptions)
 
             // parse first account ID (user might belong to multiple accounts) and baseUrl
             String accountId = loginInfo.getLoginAccounts().get(0).getAccountId()
@@ -48,13 +52,13 @@ public class DocuSignExample {
             envDef.setEmailSubject("DocuSign Java SDK - Sample Signature Request")
 
             // assign template information including ID and role(s)
-            envDef.setTemplateId("[TEMPLATE_ID]")
+            envDef.setTemplateId(properties.templateId)
 
             // create a template role with a valid templateId and roleName and assign signer info
             TemplateRole tRole = new TemplateRole()
-            tRole.setRoleName("[ROLE_NAME]")
-            tRole.setName("[SIGNER_NAME]")
-            tRole.setEmail("[SIGNER_EMAIL]")
+            tRole.setRoleName(properties.roleName)
+            tRole.setName(properties.name)
+            tRole.setEmail(properties.email)
 
             // create a list of template roles and add our newly created role
             java.util.List<TemplateRole> templateRolesList = new ArrayList<TemplateRole>()
